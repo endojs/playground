@@ -34,7 +34,15 @@
     "test:c8": "c8 $C8_OPTIONS ava --config=ava-nesm.config.js",
     "test:xs": "exit 0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@agoric/cosmic-proto": "^0.3.0",
+    "@cosmjs/crypto": "^0.31.3",
+    "@cosmjs/encoding": "^0.31.3",
+    "@cosmjs/proto-signing": "^0.31.3",
+    "@cosmjs/stargate": "^0.31.3",
+    "@endo/far": "^0.2.21",
+    "@endo/marshal": "^1.0.1"
+  },
   "devDependencies": {
     "@endo/init": "^1.0.1",
     "@endo/lockdown": "^1.0.1",
