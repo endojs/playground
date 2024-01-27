@@ -1,4 +1,4 @@
-/** needs --UNSAFE for access to Date.now() */
+/** needs --UNCONFINED for access to Date.now() */
 import { Far } from '@endo/far';
 
 export const make = () =>

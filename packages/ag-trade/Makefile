@@ -62,16 +62,16 @@ fetch-plug-in: $(PET)/cosmos-fetch
 clock-plug-in: $(PET)/clock
 
 $(PET)/client-maker: src/smartWallet.js
-	@echo ++ start smart wallet caplet -- TODO: should not need UNSAFE
-	endo make --UNSAFE src/smartWallet.js -n client-maker
+	@echo ++ start smart wallet caplet -- TODO: should not need UNCONFINED
+	endo make --UNCONFINED src/smartWallet.js -n client-maker
 
 $(PET)/cosmos-fetch: src/cosmosFetch.js
 	@echo ++ install cosmos fetch plugin
-	endo make --UNSAFE src/cosmosFetch.js -n cosmos-fetch
+	endo make --UNCONFINED src/cosmosFetch.js -n cosmos-fetch
 
 # WIP: factor clock out of fresh-id
 $(PET)/clock:
-	 endo make --UNSAFE src/clock.js -n clock
+	 endo make --UNCONFINED src/clock.js -n clock
 
 clean:
 	endo reset

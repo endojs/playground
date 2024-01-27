@@ -61,7 +61,7 @@ services:
 
 <details><summary>cosmos-fetch plug-in for simple network access</summary>
 
-We run `src/cosmosFetch.js` unconfined (`--UNSAFE`) to make an object with the following interface:
+We run `src/cosmosFetch.js` unconfined (`--UNCONFINED`) to make an object with the following interface:
 
 ```ts
 interface CosmosFetch {
@@ -85,7 +85,7 @@ interface RpcClient {
 ```
 $ make fetch-plug-in
 ++ install cosmos fetch plugin
-endo make --UNSAFE src/cosmosFetch.js -n cosmos-fetch
+endo make --UNCONFINED src/cosmosFetch.js -n cosmos-fetch
 Object [Alleged: CosmosFetch] {}
 ```
 
@@ -181,7 +181,7 @@ $ endo eval "JSON.parse(JSON.parse(that.value).values[0])" that:brand-data
 The `smartWallet.js` client factory module supports these unmarshalling conventions.
 
 ```
-endo make --UNSAFE src/smartWallet.js -n client-maker
+endo make --UNCONFINED src/smartWallet.js -n client-maker
 Object [Alleged: SmartWalletFactory] {}
 ```
 
@@ -257,7 +257,7 @@ endo eval "E(wf).makeWalletKit('survey thank ...', local.rpc, local.lcd)" \
 
 _The client factory should be an ordinary confined module, but
 due to difficulties with getting protobuf libraries to run confined,
-we use `--UNSAFE`. The signing part than handles private keys
+we use `--UNCONFINED`. The signing part than handles private keys
 should be in a separate worker from the offer / query construction code,
 but due to lack of byte-string support in `@endo/marshal`, we keep them together._
 
@@ -274,7 +274,7 @@ that runs unconfined and put the rest of the logic in a normal confined module.
 
 ```
 $ make clock-plug-in
-endo make --UNSAFE src/clock.js -n clock
+endo make --UNCONFINED src/clock.js -n clock
 Object [Alleged: Clock] {}
 ```
 

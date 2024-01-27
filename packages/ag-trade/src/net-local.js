@@ -1,6 +1,6 @@
 /**
  * Usage:
- * $ endo make --UNSAFE src/cosmosFetch.js -n cosmos-fetch
+ * $ endo make --UNCONFINED src/cosmosFetch.js -n cosmos-fetch
  * Object [Alleged: CosmosFetch] {}
  * $ endo make test/net-local.js -n local -p cosmos-fetch
  * { lcd: Object [Alleged: LCD] {}, rpc: Object [Alleged: RpcClient] {} }
