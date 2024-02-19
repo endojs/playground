@@ -1,5 +1,9 @@
 # Contributing - Design Notes
 
+## see playgroud PR
+
+notes are moving to https://github.com/endojs/playground/pull/9
+
 ## ocaml.org curl bash
 
 ```
