@@ -1,2 +1,3 @@
 (library
- (name ocproto))
+ (name ocproto)
+ (libraries capnp))
