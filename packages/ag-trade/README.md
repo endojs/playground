@@ -35,27 +35,7 @@ state: /home/connolly/.local/state/endo
 
 <details><summary>start local Agoric blockchain</summary>
 
-Use `docker compose up` with a `docker-compose.yaml` such as:
-
-```yaml
-version: '3.5'
-
-services:
-  agd:
-    # cf. https://github.com/Agoric/agoric-3-proposals
-    image: ghcr.io/agoric/agoric-3-proposals:main
-    platform: linux/amd64
-    ports:
-      - 26656:26656
-      - 26657:26657
-      - 1317:1317
-    environment:
-      DEST: 1
-      DEBUG: 'SwingSet:ls,SwingSet:vat'
-    volumes:
-      - .:/workspace
-    entrypoint: /workspace/contract/scripts/run-chain.sh
-```
+Use `docker compose up -d`. (See `docker-compose.yml`.)
 
 </details>
 
