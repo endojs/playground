@@ -41,7 +41,8 @@
     "@cosmjs/proto-signing": "^0.31.3",
     "@cosmjs/stargate": "^0.31.3",
     "@endo/far": "^0.2.21",
-    "@endo/marshal": "^1.0.1"
+    "@endo/marshal": "^1.0.1",
+    "@endo/patterns": "^1.2.0"
   },
   "devDependencies": {
     "@endo/init": "^1.0.1",
