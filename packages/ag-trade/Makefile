@@ -74,4 +74,4 @@ $(PET)/clock:
 	 endo make --UNCONFINED src/clock.js -n clock
 
 clean:
-	endo reset
+	endo purge --force
