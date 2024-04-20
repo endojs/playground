@@ -1,5 +1,7 @@
 // @ts-check
-import path from 'path';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import { Far } from '@endo/far';
 
 export class FileWatchingService {
   /**
@@ -11,7 +13,7 @@ export class FileWatchingService {
 
   /**
    * @param {string} directory
-   * @param {import('chokidar').WatchOptions} options
+   * @param {Parameters<import('fs/promises').watch>[1]} options
    */
   async *watchDirectory(directory, options = {}) {
     const events = this.fs.watch(directory, options);
@@ -19,15 +21,28 @@ export class FileWatchingService {
     for await (const event of events) {
       console.log('@@', event);
       const { filename } = event;
-      if (filename === null) break;
+      // XXX Buffer not supported
+      if (typeof filename !== 'string') break;
       const fullPath = path.join(directory, filename);
-      yield {
+      yield Far('File', {
         getName: () => filename,
         getContent: async () => {
           const content = await this.fs.readFile(fullPath, 'utf-8');
           return content;
         },
-      };
+      });
     }
   }
 }
+
+const watcher = new FileWatchingService(fs);
+
+export const make = () => {
+  return Far('FileWatcherFactory', {
+    /** @param {string} path */
+    make: path =>
+      Far('FileWatcher', {
+        watch: () => watcher.watchDirectory(path),
+      }),
+  });
+};
