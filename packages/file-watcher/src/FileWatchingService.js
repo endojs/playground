@@ -42,7 +42,13 @@ export const make = () => {
     /** @param {string} path */
     make: path =>
       Far('FileWatcher', {
-        watch: () => watcher.watchDirectory(path),
+        watch: () => {
+          const events = watcher.watchDirectory(path);
+          return Far('FileEvents', {
+            next: () => events.next(),
+            return: () => events.return(),
+          });
+        },
       }),
   });
 };
