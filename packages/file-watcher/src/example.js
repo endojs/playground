@@ -1,9 +1,9 @@
 // @ts-check
 import { promises as fs } from 'fs'; // Assuming fs promises for async reading
-import { FileWatchingService } from './FileWatchingService.js';
+import { FileWatcher } from './file-watcher.js';
 
 (async () => {
-  const watcher = new FileWatchingService(fs);
+  const watcher = new FileWatcher(fs);
 
   const { env } = process;
   console.log('watching Downloads');

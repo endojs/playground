@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import { Far } from '@endo/far';
 
-export class FileWatchingService {
+export class FileWatcher {
   /**
    * @param {Pick<typeof import('fs/promises'), 'readFile' | 'watch'>} fs
    */
@@ -35,7 +35,7 @@ export class FileWatchingService {
   }
 }
 
-const watcher = new FileWatchingService(fs);
+const watcher = new FileWatcher(fs);
 
 export const make = () => {
   return Far('FileWatcherFactory', {
