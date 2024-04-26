@@ -1,7 +1,9 @@
 // @ts-check
-import { E, Far } from '@endo/far';
+import { makeExo } from '@endo/exo';
 import { makePromiseKit } from '@endo/promise-kit';
 import { M, mustMatch } from '@endo/patterns';
+
+const { Fail } = assert;
 
 /** @typedef {'rock' | 'paper' | 'scissors'} Choice */
 const ChoiceShape = M.or('rock', 'paper', 'scissors');
@@ -19,7 +21,8 @@ const defeats = {
 /**
  * @param {Choice} c1
  * @param {Choice} c2
- * @returns {'draw' | { winner: 1 | 2, why: string }}
+ * @returns {GameResult}
+ * @typedef {'draw' | { winner: 1 | 2, why: string }} GameResult
  */
 export const score = (c1, c2) => {
   mustMatch(c1, ChoiceShape);
@@ -34,28 +37,44 @@ export const score = (c1, c2) => {
   );
 };
 
-export const playAgainst = async opponent => {
-  const makePlayer = (label, { resolve }, outcome) => {
-    const p2 = Far(label, {
-      choose: x => {
-        mustMatch(x, ChoiceShape);
-        resolve(x);
+const GameResultShape = M.or('draw', {
+  winner: M.or(1, 2),
+  why: M.string(),
+});
+
+export const make = () => {
+  /** @type {import('@endo/promise-kit').PromiseKit<GameResult>} */
+  const outcomePK = makePromiseKit();
+  let attackerChoice;
+
+  const attacker = makeExo(
+    'RockPaperScissors',
+    M.interface('RPSI', {
+      attack: M.call(ChoiceShape).returns(M.remotable('Defender')),
+      getResult: M.call().returns(M.promise()),
+    }),
+    {
+      /** @param {Choice} choice1 */
+      attack: choice1 => {
+        !attackerChoice || Fail`already chose ${attackerChoice}`;
+        attackerChoice = choice1;
+        return makeExo(
+          'Defender',
+          M.interface('Defender', {
+            defend: M.call(ChoiceShape).returns(GameResultShape),
+          }),
+          {
+            /** @param {Choice} choice2 */
+            defend: choice2 => {
+              const outcome = score(choice1, choice2);
+              outcomePK.resolve(outcome);
+              return outcome;
+            },
+          },
+        );
       },
-      getOutcome: () => outcome,
-    });
-  };
-
-  const choice = {
-    p1: makePromiseKit(),
-    p2: makePromiseKit(),
-  };
-  const outcome = Promise.all([choice.p1.promise, choice.p2.promise]).then(
-    ([c1, c2]) => score(c1, c2),
+      getResult: () => outcomePK.promise,
+    },
   );
-  const p1 = makePlayer('P1', choice.p1, outcome);
-  const p2 = makePlayer('P2', choice.p2, outcome);
-  await E(opponent).accept(p2);
-  return p1;
+  return attacker;
 };
-
-export const make = () => Far('RockPaperScissors', { playAgainst });
