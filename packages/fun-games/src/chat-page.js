@@ -1,6 +1,14 @@
+/**
+ * @file lskdjf
+ * endo restart; endo install src/chat-page.js --name chat --listen 8291 --powers AGENT
+ */
+
+// @ts-check
 import { E } from '@endo/far';
 import { makePromiseKit } from '@endo/promise-kit';
 import { makeRefIterator } from '@endo/daemon/ref-reader.js';
+import { formatMessage } from './message-format';
+import { parseMessage } from './message-parse';
 
 const { quote } = assert;
 
@@ -70,7 +78,7 @@ harden(NonNullish);
  *
  * @param {{
  *   querySelector: typeof document.querySelector;
- *   host: Pick<EndoHost, 'send' | 'followMessages' >
+ *   host: Pick<EndoHost, 'send' | 'followMessages' | 'evaluate' | 'reverseIdentify' >
  * }} io
  */
 export const attach = ({ querySelector, host }) => {
@@ -93,9 +101,13 @@ export const attach = ({ querySelector, host }) => {
         to: toId,
         date,
         dismissed,
+        names: edgeNames,
       } = message;
       console.log('Message from server ', message);
-      historyBox.value += strings.join('@@') + '\n';
+      const [_to, from] = await Promise.all(
+        [toId, fromId].map(id => E(host).reverseIdentify(id)),
+      );
+      historyBox.value += `${from}: ${formatMessage(strings, edgeNames)}\n`;
     }
   })().catch(oops => console.error(oops));
 
@@ -104,9 +116,10 @@ export const attach = ({ querySelector, host }) => {
     ev => {
       ev.preventDefault();
       const txt = msgBox.value;
+      const { strings, petNames, edgeNames } = parseMessage(txt);
       // XXX peer? get name from ui?
       console.log('sending...', txt);
-      E(host).send('SELF', [txt], [], []);
+      E(host).send('SELF', strings, edgeNames, petNames);
     },
   );
 };
