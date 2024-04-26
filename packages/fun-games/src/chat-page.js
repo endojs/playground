@@ -43,6 +43,8 @@ const page = `
       <legend>Chat</legend>
       <textarea name="history" cols="80" rows="20"> </textarea>
       <br />
+      <input name="peerName" size="40" value="SELF" />
+      <br />
       <input name="msg" size="60" /> <input type="submit" name="send" value="Send" />
     </fieldset>
     </fieldset>
@@ -84,6 +86,9 @@ harden(NonNullish);
 export const attach = ({ querySelector, host }) => {
   /** @type {HTMLInputElement} */
   // @ts-expect-error TODO
+  const peerBox = NonNullish(querySelector('input[name="peerName"]'));
+  /** @type {HTMLInputElement} */
+  // @ts-expect-error TODO
   const msgBox = NonNullish(querySelector('input[name="msg"]'));
   /** @type {HTMLInputElement} */
   // @ts-expect-error TODO
@@ -116,10 +121,11 @@ export const attach = ({ querySelector, host }) => {
     ev => {
       ev.preventDefault();
       const txt = msgBox.value;
+      const peerName = peerBox.value;
       const { strings, petNames, edgeNames } = parseMessage(txt);
       // XXX peer? get name from ui?
-      console.log('sending...', txt);
-      E(host).send('SELF', strings, edgeNames, petNames);
+      console.log('sending...', peerName, txt);
+      E(host).send(peerName, strings, edgeNames, petNames);
     },
   );
 };
