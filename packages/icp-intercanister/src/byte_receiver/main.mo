@@ -3,6 +3,8 @@ import OcapnTypes "../ocapn_types";
 import Vattp "../vattp_boundary";
 
 persistent actor {
+  // TODO(ocap-authority): integrate `src/swissnum.mo` for bootstrap/discovery
+  // refs and enforce descriptor-table validation in `ocapn_handle`.
   // Minimal echo callable; `call` mirrors callable-object naming conventions.
   func call(args : [OcapnTypes.OcapnValue]) : [OcapnTypes.OcapnValue] {
     args

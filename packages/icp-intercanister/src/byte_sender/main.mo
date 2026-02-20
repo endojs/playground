@@ -27,6 +27,8 @@ persistent actor {
   public func ocapn_deliver_with_resolver_ok() : async Bool {
     let echoProxy = object {
       let myChannel = theChannel;
+      // TODO(ocap-authority): replace this forgeable textual target with a
+      // swissnum/bootstrap flow and descriptor-table positions.
       let to = "echo-gc";
 
       public func call(
