@@ -13,6 +13,11 @@ module {
    */
 
   public type RefId = Text;
+  // TODO(ocap-authority): `Desc` is currently a forgeable `Text` placeholder.
+  // Replace this with session-scoped import/export descriptor positions (or
+  // equivalent opaque ids) validated against per-session tables on inbound
+  // messages, so descriptor guessing cannot escalate authority.
+  // For bootstrap/discovery refs, require unguessable swissnum-strength tokens.
   public type Desc = Text;
   public type PublicKey = Blob;
   public type Location = Text;
