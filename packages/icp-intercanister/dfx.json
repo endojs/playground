@@ -1,0 +1,23 @@
+{
+  "canisters": {
+    "byte_receiver": {
+      "main": "src/byte_receiver/main.mo",
+      "type": "motoko"
+    },
+    "byte_sender": {
+      "dependencies": [
+        "byte_receiver"
+      ],
+      "main": "src/byte_sender/main.mo",
+      "type": "motoko"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
