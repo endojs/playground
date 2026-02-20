@@ -16,15 +16,4 @@ module {
     #bytes : Blob;
     #list : [OcapnValue];
   };
-
-  public type OcapnMessage = {
-    op : { #deliver; #deliver_only };
-    args : [OcapnValue];
-    resolve_me_desc : ?Text;
-  };
-
-  public type OcapnResolution = {
-    resolver : Text;
-    args : [OcapnValue];
-  };
 };

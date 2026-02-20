@@ -11,8 +11,8 @@ The inter-canister plumbing in this package is in service of that goal.
 
 Current canisters:
 
-- `byte_receiver`: OCapN-message receiver for the selected-case behavior, plus a byte echo method.
-- `byte_sender`: test driver that performs inter-canister calls and validates expected resolution shape.
+- `byte_receiver`: inbound handler canister; `handleInbound` is the sole public entrypoint.
+- `byte_sender`: test driver that performs inter-canister calls, validates expected resolution shape, and also supports `handleInbound`.
 
 Before changing protocol-facing types, read `CONTRIBUTING.md`.
 
@@ -20,6 +20,8 @@ Before changing protocol-facing types, read `CONTRIBUTING.md`.
 
 - `src/byte_receiver/main.mo`
 - `src/byte_sender/main.mo`
+- `src/vattp_boundary.mo` (transport/session boundary interfaces)
+- `src/ocapn_protocol.mo` (OCapN/CapTP message and reference-lifecycle boundary interfaces)
 - `dfx.json`
 
 ## Run
@@ -34,7 +36,7 @@ This command:
 
 1. start local replica
 2. deploy both canisters
-3. calls `byte_sender.send(...)` with a sample byte payload
+3. calls `byte_sender.ocapn_deliver_with_resolver_ok`
 
 Run the selected OCapN deliver-with-resolver case between canisters:
 
@@ -59,6 +61,7 @@ The selected-case method models:
 - message: `op:deliver`
 - args: `["foo", 1, false, b"bar", ["baz"]]`
 - expected resolution args: `[symbol("fulfill"), original_args]`
+- transport in this prototype path: `to_candid` / `from_candid` bytes for `OcapnMessage` and `OcapnResolution`
 
 Stop local replica when done:
 
@@ -66,20 +69,17 @@ Stop local replica when done:
 make icp-replica-stop
 ```
 
-## Manual Call Example
-
-```bash
-cd packages/icp-intercanister
-~/.local/share/dfx/bin/dfx canister call --network local byte_sender send '(vec { 73; 67; 80; 32; 111; 99; 97; 112 })'
-```
-
-Expected response is the same byte vector echoed back.
-
-Manual selected-case call:
+## Manual Call
 
 ```bash
 cd packages/icp-intercanister
 TERM=xterm-256color ~/.local/share/dfx/bin/dfx canister call --network local byte_sender ocapn_deliver_with_resolver_ok
+```
+
+Expected response:
+
+```candid
+(true)
 ```
 
 ## Where Local State Lives

@@ -4,8 +4,6 @@ DFX ?= $(HOME)/.local/share/dfx/bin/dfx
 DFX_ENV ?= TERM=xterm-256color
 ICP_DEMO_DIR ?= packages/icp-intercanister
 ICP_NETWORK ?= local
-ICP_CANISTER ?= byte_sender
-ICP_BYTES ?= (vec { 73; 67; 80; 32; 111; 99; 97; 112 })
 
 .PHONY: icp-check icp-new icp-port-check icp-replica-start icp-deploy icp-call icp-ocapn-case icp-replica-stop icp-hello icp-intercanister icp-ocapn-deliver-with-resolver ocapn
 
@@ -40,7 +38,7 @@ icp-deploy: icp-check
 	cd "$(ICP_DEMO_DIR)" && $(DFX_ENV) "$(DFX)" deploy --network "$(ICP_NETWORK)"
 
 icp-call: icp-check
-	cd "$(ICP_DEMO_DIR)" && $(DFX_ENV) "$(DFX)" canister call --network "$(ICP_NETWORK)" "$(ICP_CANISTER)" send '$(ICP_BYTES)'
+	cd "$(ICP_DEMO_DIR)" && $(DFX_ENV) "$(DFX)" canister call --network "$(ICP_NETWORK)" "byte_sender" ocapn_deliver_with_resolver_ok
 
 icp-ocapn-case: icp-check
 	cd "$(ICP_DEMO_DIR)" && $(DFX_ENV) "$(DFX)" canister call --network "$(ICP_NETWORK)" "byte_sender" ocapn_deliver_with_resolver_ok
